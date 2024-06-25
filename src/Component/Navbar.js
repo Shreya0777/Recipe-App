@@ -1,23 +1,57 @@
-import {useState} from "react";
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import Sidebar from './Sidebar';
+import { faHome, faList, faCog } from '@fortawesome/free-solid-svg-icons';
 
-const Navbar=()=>{
-    const [showSidebar,setshowSidebar]=useState(false);
-    return(
-    <div className="navbar container">
-     <a href="#!" className="logo">F<span>oo</span>diesHub</a> 
-     <div className="nav-links">
-         <a href="#!">Home</a>
-         <a href="#!">Receipes</a>
-         <a href="#!">Settings</a>
+const Navbar = () => {
+  const [showSidebar, setShowSidebar] = useState(false);
 
-     </div>
-    {/* hang burger item */}
-    <div onClick={()=> setshowSidebar(!showSidebar)}className={showSidebar ? "sidebar-btn active" : "sidebar-btn"}>
-    <div className="bar"></div>
-    <div className="bar"></div>
-    <div className="bar"></div>
-    </div>
-    </div>
-    )
-}
+  const links = [
+    {
+      name: 'Home',
+      path: '/',
+      icon: faHome
+    },
+    {
+      name: 'Recipes',
+      path: '/recipes',
+      icon: faList
+    },
+    {
+      name: 'Settings',
+      path: '/settings',
+      icon: faCog
+    }
+  ];
+
+  function closeSidebar() {
+    setShowSidebar(false);
+  }
+
+  return (
+    <>
+      <div className="navbar container">
+        <Link to="/" className="logo">
+          F<span>oo</span>diesHub
+        </Link>
+        <div className="nav-links">
+          {links.map(link => (
+            <Link to={link.path} key={link.name}>
+              {link.name}
+            </Link>
+          ))}
+        </div>
+        {/* hamburger button */}
+        <div onClick={() => setShowSidebar(true)} className={showSidebar ? 'sidebar-btn active' : 'sidebar-btn'}>
+          <div className="bar"></div>
+          <div className="bar"></div>
+          <div className="bar"></div>
+        </div>
+      </div>
+      {/* if showSidebar state is true then show the sidebar */}
+      {showSidebar && <Sidebar close={closeSidebar} links={links} />}
+    </>
+  );
+};
+
 export default Navbar;
